@@ -97,4 +97,9 @@ class County
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->county_name;
+    }
 }
