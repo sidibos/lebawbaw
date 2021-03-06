@@ -1,6 +1,6 @@
 {% extends '@!EasyAdmin/page/login.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Sign in!{% endblock %}
 
 {% block wrapper_wrapper %}
     {% set page_title = block('page_title') %}
@@ -11,7 +11,7 @@
     <div class="login-wrapper">
         <header class="main-header mb-4">
             <div id="header-logo">
-                {% block header_logo %}
+                {#{% block header_logo %}
                     {% if page_title %}
                         {% if ea is defined %}
                             <a class="logo {{ page_title|length > 14 ? 'logo-long' }}" title="{{ page_title|striptags }}" href="{{ path(ea.dashboardRouteName) }}">
@@ -23,7 +23,8 @@
                             </div>
                         {% endif %}
                     {% endif %}
-                {% endblock header_logo %}
+                {% endblock header_logo %}#}
+                {{ sign_in_label }}
             </div>
         </header>
 
@@ -70,7 +71,7 @@
             </script>
         </section>
         <section>
-            Or <a class="btn btn-primary btn-lg" href="/register">Register</>
+            Or <a class="btn btn-primary btn-lg" href="/register">Register</a>
         </section>
     </div>
 {% endblock %}
