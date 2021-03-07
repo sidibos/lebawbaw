@@ -3,19 +3,41 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    {% for flashError in app.flashes('verify_email_error') %}
+<section class="page-title">
+	<!-- Container Start -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 offset-md-2 text-center">
+				<!-- Title text -->
+				<h3>Sign Up</h3>
+			</div>
+		</div>
+	</div>
+	<!-- Container End -->
+</section>
+
+{#{% for flashError in app.flashes('verify_email_error') %}
+    <section class="section">
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-    {% endfor %}
+    </section>
+{% endfor %}#}
 
-    <h1>Register</h1>
+<section class="section">
+    <div class="container">
+		<div class="row">
+            <div class="col-md-4 offset-md-4">
+                <h1>Please sign up</h1>
 
-   {{ form_start(form) }}
-        {{ form_row(form.email) }}
-        {{ form_row(form.first_name) }}
-        {{ form_row(form.last_name) }}
-        {{ form_row(form.plainPassword) }}
-        {# {{ form_row(form.plainPassword.second) }}#}
+                {{ form_start(form) }}
+                    {{ form_row(form.first_name) }}
+                    {{ form_row(form.last_name) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.plainPassword) }}
+                    {# {{ form_row(form.plainPassword.second) }}#}
 
-        <button type="submit">Register!</button>
-    {{ form_end(form) }}
+                    <button type="submit" class="w-100 btn btn-lg btn-primary">Sign in</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+</section>
 {% endblock %}

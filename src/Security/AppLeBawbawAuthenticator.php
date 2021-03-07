@@ -99,7 +99,7 @@ class AppLeBawbawAuthenticator extends AbstractFormLoginAuthenticator implements
         }
     
         // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        return new RedirectResponse($this->urlGenerator->generate('admin'));
+        return new RedirectResponse($this->urlGenerator->generate('home_page'));
     }
 
     protected function getLoginUrl()

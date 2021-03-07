@@ -38,17 +38,18 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
+            $entityManager  = $this->getDoctrine()->getManager();
+            $county         = $entityManager->getRepository(County::class)->find(1);
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
-            );
+            )->setFirstName($form->get('first_name')->getData())
+            ->setLastName($form->get('last_name')->getData())
+            ->setEmail($form->get('email')->getData())
+            ->setCounty($county);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $county = $entityManager->getRepository(County::class)->find(1);
-
-            $user->setCounty($county);
             $entityManager->persist($user);
             $entityManager->flush();
 

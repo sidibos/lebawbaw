@@ -29,6 +29,7 @@ security:
             #     max_attempts: 3
 
             anonymous: true
+            lazy: true
             provider: my_db_provider
             guard:
                 authenticators:
