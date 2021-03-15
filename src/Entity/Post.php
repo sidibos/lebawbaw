@@ -82,7 +82,7 @@ class Post
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=PostImage::class, mappedBy="post")
+     * @ORM\OneToMany(targetEntity=PostImage::class, mappedBy="post", cascade={"persist"})
      */
     private $postImages;
 
@@ -90,6 +90,16 @@ class Post
      * @ORM\OneToMany(targetEntity=PostAttribute::class, mappedBy="post")
      */
     private $postAttributes;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=County::class, inversedBy="posts")
+     */
+    private $county;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $address;
 
     public function __construct()
     {
@@ -302,6 +312,30 @@ class Post
                 $postAttribute->setPost(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCounty(): ?County
+    {
+        return $this->county;
+    }
+
+    public function setCounty(?County $county): self
+    {
+        $this->county = $county;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }

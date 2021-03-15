@@ -19,6 +19,21 @@ class CityRepository extends ServiceEntityRepository
         parent::__construct($registry, City::class);
     }
 
+    public function getCityAndCounties()
+    {
+        $cityName = 'Conakry';
+        $cityAndCounties = [];
+        $city = $this->createQueryBuilder('c')
+        ->andWhere('c.city_name = :cityName')
+        ->setParameter('cityName', $cityName)
+        ->getQuery()
+        ->getOneOrNullResult();
+        if ($city) {
+            return $city->getCountiesForForm();
+        }
+        return $city;
+    } 
+
     // /**
     //  * @return City[] Returns an array of City objects
     //  */

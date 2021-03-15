@@ -49,12 +49,34 @@ class Category
      */
     private $properties;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $post_validity_interval_in_days;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="subCategories")
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Category::class, mappedBy="parent")
+     */
+    private $subCategories;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PostAlert::class, mappedBy="category")
+     */
+    private $postAlerts;
+
     public function __construct()
     {
         $this->parent_category = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->posts = new ArrayCollection();
         $this->properties = new ArrayCollection();
+        $this->subCategories = new ArrayCollection();
+        $this->postAlerts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,6 +213,95 @@ class Category
             // set the owning side to null (unless already changed)
             if ($property->getCategory() === $this) {
                 $property->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPostValidityIntervalInDays(): ?int
+    {
+        return $this->post_validity_interval_in_days;
+    }
+
+    public function setPostValidityIntervalInDays(?int $post_validity_interval_in_days): self
+    {
+        $this->post_validity_interval_in_days = $post_validity_interval_in_days;
+
+        return $this;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setParent(?self $parent): self
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getSubCategories(): Collection
+    {
+        return $this->subCategories;
+    }
+
+    public function addSubCategory(self $subCategory): self
+    {
+        if (!$this->subCategories->contains($subCategory)) {
+            $this->subCategories[] = $subCategory;
+            $subCategory->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubCategory(self $subCategory): self
+    {
+        if ($this->subCategories->removeElement($subCategory)) {
+            // set the owning side to null (unless already changed)
+            if ($subCategory->getParent() === $this) {
+                $subCategory->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->category_name;
+    }
+
+    /**
+     * @return Collection|PostAlert[]
+     */
+    public function getPostAlerts(): Collection
+    {
+        return $this->postAlerts;
+    }
+
+    public function addPostAlert(PostAlert $postAlert): self
+    {
+        if (!$this->postAlerts->contains($postAlert)) {
+            $this->postAlerts[] = $postAlert;
+            $postAlert->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostAlert(PostAlert $postAlert): self
+    {
+        if ($this->postAlerts->removeElement($postAlert)) {
+            // set the owning side to null (unless already changed)
+            if ($postAlert->getCategory() === $this) {
+                $postAlert->setCategory(null);
             }
         }
 

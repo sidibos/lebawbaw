@@ -19,6 +19,37 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
+    public function getCategoryListWithChildren()
+    {
+        $categoryList = [];
+        $parents = $this->createQueryBuilder('c')
+        ->select(['c.id', 'c.category_name'])
+        ->andWhere('c.parent is NULL')
+        ->getQuery()
+        ->getResult();
+
+        foreach($parents as $parent) {
+            $categoryList[$parent['category_name']] = $this->getCategoryById($parent['id']);
+        }
+        return $categoryList;
+    }
+
+    public function getCategoryById(int $id)
+    {
+        $categoryList = $this->createQueryBuilder('c')
+        ->select(['c.id', 'c.category_name'])
+        ->andWhere('c.parent = :catId')
+        ->setParameter('catId', $id)
+        ->getQuery()
+        ->getResult();
+        
+        $myList = [];
+        array_walk($categoryList, function($category, $key) use (&$myList) {
+            $myList[$category['id']] = $category['category_name'];
+        });
+        return array_flip($myList);
+    }
+
     // /**
     //  * @return Category[] Returns an array of Category objects
     //  */

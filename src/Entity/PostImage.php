@@ -50,7 +50,7 @@ class PostImage
         return $this->image;
     }
 
-    public function setImage($image): self
+public function setImage($image): self
     {
         $this->image = $image;
 

@@ -13,12 +13,13 @@ use App\Entity\City;
 use App\Entity\County;
 use App\Entity\User;
 use App\Entity\Post;
+use App\Entity\Role;
 use App\Entity\Category;
 use App\Entity\Language;
 use App\Entity\Country;
 use App\Entity\Currency;
 use App\Entity\PostAttribute;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class AdminDashboardController extends AbstractDashboardController
 {
@@ -79,6 +80,8 @@ class AdminDashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Post Attributes', 'fa fa-tags', PostAttribute::class);
         yield MenuItem::linkToCrud('Add PostAttribute', 'fa fa-tags', PostAttribute::class)->setAction('new');
 
+        yield MenuItem::linkToCrud('Roles', 'fa fa-tags', Role::class);
+        yield MenuItem::linkToCrud('Add Role', 'fa fa-tags', Role::class)->setAction('new');
 
        // yield MenuItem::linkToLogout('Logout', 'fa fa-exit');
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);

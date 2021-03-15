@@ -2,9 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Post;
+use App\Form\PostType;
+use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 class PostController extends AbstractController
 {
@@ -16,5 +21,59 @@ class PostController extends AbstractController
         return $this->render('post/index.html.twig', [
             'controller_name' => 'PostController',
         ]);
+    }
+
+    /**
+     * @Route("/post/add", name="add_post")
+     */
+    public function new(Request $request, FileUploader $fileUploader): Response
+    {
+        // just setup a fresh $task object (remove the example data)
+        $post = new Post();
+
+        $form = $this->createForm(PostType::class, $post);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() holds the submitted values
+            // but, the original `$task` variable has also been updated
+            $imageFiles = $form->get('images')->getData();
+            $entityManager = $this->getDoctrine()->getManager();
+            if ($imageFiles) {
+                $images = $fileUploader->upload($imageFiles);
+                foreach($images as $postImage) {
+                    //$entityManager->persist($postImage);
+                    $post->addPostImage($postImage);
+                }
+            }
+            $post->setCreatedDate(new \DateTime('Now'))
+            ->setIsActive(true)
+            ->setIsFree(false)
+            ->setIsPriceNegotiable(false)->setUser($this->getUser());
+            
+            $entityManager->persist($post);
+            $entityManager->flush();
+            //$post = $form->getData();
+
+            // ... perform some action, such as saving the task to the database
+            // for example, if Task is a Doctrine entity, save it!
+            // $entityManager = $this->getDoctrine()->getManager();
+            // $entityManager->persist($task);
+            // $entityManager->flush();
+
+            return $this->redirectToRoute('post_success');
+        }
+
+        return $this->render('post/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/post/success", name="post_success")
+     */
+    public function postSuccess()
+    {
+        return $this->render('post/success.html.twig');
     }
 }

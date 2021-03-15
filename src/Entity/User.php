@@ -88,6 +88,16 @@ class User implements UserInterface, \Serializable
      */
     private $isVerified = false;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Role::class, inversedBy="users")
+     */
+    private $assignedRole;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PostAlert::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $postAlerts;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -95,6 +105,7 @@ class User implements UserInterface, \Serializable
         // may not be needed, see section on salt below
         $this->salt = md5(uniqid('', true));
         $this->is_privacy_enabled = false;
+        $this->postAlerts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -241,8 +252,11 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getRoles()
+    public function getRoles(): ?array
     {
+        if ($this->assignedRole) {
+           return [$this->assignedRole->getName()];
+        }
         return array('ROLE_USER');
     }
 
@@ -333,6 +347,48 @@ class User implements UserInterface, \Serializable
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getAssignedRole(): ?Role
+    {
+        return $this->assignedRole;
+    }
+
+    public function setAssignedRole(?Role $assignedRole): self
+    {
+        $this->assignedRole = $assignedRole;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PostAlert[]
+     */
+    public function getPostAlerts(): Collection
+    {
+        return $this->postAlerts;
+    }
+
+    public function addPostAlert(PostAlert $postAlert): self
+    {
+        if (!$this->postAlerts->contains($postAlert)) {
+            $this->postAlerts[] = $postAlert;
+            $postAlert->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostAlert(PostAlert $postAlert): self
+    {
+        if ($this->postAlerts->removeElement($postAlert)) {
+            // set the owning side to null (unless already changed)
+            if ($postAlert->getUser() === $this) {
+                $postAlert->setUser(null);
+            }
+        }
 
         return $this;
     }

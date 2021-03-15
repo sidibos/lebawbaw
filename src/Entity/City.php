@@ -77,6 +77,15 @@ class City
         return $this->counties;
     }
 
+    public function getCountiesForForm()
+    {
+        $countyList = [];
+        foreach($this->counties as $county) {
+            $countyList[$county->getCountyName()] = $county->getId();
+        }
+        return $countyList;
+    }
+
     public function addCounty(County $county): self
     {
         if (!$this->counties->contains($county)) {
