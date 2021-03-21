@@ -21,7 +21,7 @@ class FileUploader
         $this->slugger          = $slugger;
     }
 
-    public function upload(UploadedFile $file): array
+    public function upload(UploadedFile $file): ?PostImage
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
@@ -34,14 +34,14 @@ class FileUploader
             //$this->entityManager->persist($postImage);
             //$this->entityManager->flush();
             @unlink($file->getPath() . '/' . $fileName);
-            return [$postImage];
+            return $postImage;
             //$file->move($this->getTargetDirectory(), $fileName);
         } catch (FileException $e) {
             die($e->getMessage());
             // ... handle exception if something happens during file upload
         }
 
-        return [];
+        return null;
     }
 
     public function getTargetDirectory()

@@ -2,6 +2,11 @@
 
 {% block title %}Create Post{% endblock %}
 
+{% block javascripts %}
+     {{ parent() }}
+     {{ encore_entry_script_tags('post') }}
+{% endblock %}
+
 {% block body %}
 <section class="page-title">
 	<!-- Container Start -->

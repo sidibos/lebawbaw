@@ -38,13 +38,18 @@ class PostController extends AbstractController
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
             $imageFiles = $form->get('images')->getData();
+            
             $entityManager = $this->getDoctrine()->getManager();
             if ($imageFiles) {
-                $images = $fileUploader->upload($imageFiles);
-                foreach($images as $postImage) {
-                    //$entityManager->persist($postImage);
-                    $post->addPostImage($postImage);
+                foreach($imageFiles as $imageFile) {
+                    if ($postImage = $fileUploader->upload($imageFile)) {
+                        $post->addPostImage($postImage);
+                    }
                 }
+                // $images = $fileUploader->upload($imageFiles);
+                // foreach($images as $postImage) {
+                //     $post->addPostImage($postImage);
+                // }
             }
             $post->setCreatedDate(new \DateTime('Now'))
             ->setIsActive(true)

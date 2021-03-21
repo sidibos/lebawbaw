@@ -8,12 +8,16 @@
   	<meta name="viewport" content="width=device-width, initial-scale=1">
   	<title>{% block title %}Welcome!{% endblock %}</title>
 
+	{% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+  	{% endblock %}
+
 	{% block stylesheets %}
 		{{ encore_entry_link_tags('app') }}
 	{% endblock %}
   
 	<!-- PLUGINS CSS STYLE -->
-	<link href="plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+	{#<link href="plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
 	<!-- Bootstrap -->
 	<link href="plugins/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Font Awesome -->
@@ -24,7 +28,7 @@
 	<!-- Fancy Box -->
 	<link href="plugins/fancybox/jquery.fancybox.pack.css" rel="stylesheet">
 	<link href="plugins/jquery-nice-select/css/nice-select.css" rel="stylesheet">
-	<link href="plugins/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" rel="stylesheet">
+	<link href="plugins/seiyria-bootstrap-slider/dist/css/bootstrap-slider.min.css" rel="stylesheet">#}
 	<!-- CUSTOM CSS -->
 
 	<!-- FAVICON -->
@@ -472,7 +476,7 @@
         <!-- About -->
         <div class="block about">
           <!-- footer logo -->
-          <img src="images/logo-footer.png" alt="">
+          <img src="{{ asset('build/logo-footer.png') }}" alt="">
           <!-- description -->
           <p class="alt-color">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
         </div>
@@ -548,10 +552,7 @@
 </footer>
 
   <!-- JAVASCRIPTS -->
-  {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-  {% endblock %}
-  <script src="plugins/jquery/jquery.min.js"></script>
+  {#<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
   <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
   <script src="plugins/tether/js/tether.min.js"></script>
   <script src="plugins/raty/jquery.raty-fa.js"></script>
@@ -563,7 +564,7 @@
   <script src="plugins/fancybox/jquery.fancybox.pack.js"></script>
   <script src="plugins/smoothscroll/SmoothScroll.min.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC72vZw-6tGqFyRhhg5CkF2fqfILn2Tsw"></script>
-  <script src="js/scripts.js"></script>
+  <script src="js/scripts.js"></script>#}
 {% endblock %}
 
 </body>

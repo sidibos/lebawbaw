@@ -20,6 +20,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\All;
 
 class PostType extends AbstractType
 {
@@ -36,7 +37,8 @@ class PostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         //$categoryList   = $this->entityManager->getRepository(Category::class)->getCategoryListWithChildren();
-        $categoryList   = $this->entityManager->getRepository(Category::class)->findAll();
+        $categoryList   = $this->entityManager->getRepository(Category::class)->getCategoryWitoutParents();
+        $catParents     = [];
         $countyList     = $this->entityManager->getRepository(County::class)->findAll();
         //$cityList       = ['-- Conakry --' => $cityCounties];
 
@@ -52,9 +54,11 @@ class PostType extends AbstractType
                 'choice_attr' => function(?Category $category) {
                     return $category ? ['class' => 'category_'.strtolower($category->getCategoryName())] : [];
                 },
-                'group_by' => function(?Category $category) {
-                    $catParent = $category->getParent();
-                    return $category && $catParent === null ? $category->getCategoryName() : $catParent->getCategoryName();
+                'group_by' => function(?Category $category) use(&$catParents) {
+                    if ($category) {
+                        return $category->getParent()->getCategoryName();
+                    }
+                    //return $category && $catParent === null ? $category->getCategoryName() : $catParent->getCategoryName();
                 },
             ])
             ->add('is_individual', ChoiceType::class, [
@@ -95,7 +99,11 @@ class PostType extends AbstractType
                     //return $category && $catParent === null ? $category->getCategoryName() : $catParent->getCategoryName();
                 },
             ])
-            ->add('address', TextType::class, ['label' => 'Other addess (Quartier)'])
+            ->add('address', TextType::class, [
+                'label' => 'Other addess (Quartier)',
+                'required' => false,
+                ]
+            )
             ->add('images', FileType::class, [
                 'label' => 'Images',
 
@@ -105,29 +113,38 @@ class PostType extends AbstractType
                 // make it optional so you don't have to re-upload the PDF file
                 // every time you edit the Product details
                 'required' => false,
+                'multiple' => true,
+                'attr'     => [
+                    'accept' => 'image/*',
+                    'multiple' => 'multiple'
+                ],
 
                 // unmapped fields can't define their validation using annotations
                 // in the associated entity, so you can use the PHP constraint classes
                 'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/png',
-                                'image/jpeg',
-                                'image/jpg',
-                                'image/gif',
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid image',
-                    ])
+                    new All([
+                            new File([
+                                'maxSize' => '1024k',
+                                'mimeTypes' => [
+                                    'image/png',
+                                        'image/jpeg',
+                                        'image/jpg',
+                                        'image/gif',
+                                ],
+                                'mimeTypesMessage' => 'Please upload a valid image',
+                            ]
+                        )]
+                    )
                 ],
             ])
             // ->add(
             //     $builder->create(
-            //         'photo', 
+            //         'photos', 
             //         FormType::class, [
             //             'by_reference' => true, 
             //             'mapped' => false,
-            //             'label' => 'Upload photos'
+            //             'label' => 'Upload photos',
+            //             'inherit_data' => true,
             //             ])
             //         ->add('image_one', FileType::class, [
             //         'label' => 'Add image 1 (jpg, png)',

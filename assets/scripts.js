@@ -62,9 +62,9 @@
             $('.code-input').fadeOut(500);
         });
         /***ON-LOAD***/
-        jQuery(window).on('load', function () {
+        // jQuery(window).on('load', function () {
             
-        });
+        // });
 
     });
 
@@ -73,7 +73,7 @@
 
 
  $(document).ready(function() {
-  $('select:not(.ignore)').niceSelect();      
+  //$('select:not(.ignore)').niceSelect();      
 });
 
 
@@ -152,12 +152,12 @@ function initialize() {
     });
 }
 
-google.maps.event.addDomListener(window, 'load', initialize);
+//google.maps.event.addDomListener(window, 'load', initialize);
 
 
 
 
-var slider = new Slider('#ex2', {});
+//var slider = new Slider('#ex2', {});
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()

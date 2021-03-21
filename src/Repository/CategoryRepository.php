@@ -42,12 +42,20 @@ class CategoryRepository extends ServiceEntityRepository
         ->setParameter('catId', $id)
         ->getQuery()
         ->getResult();
-        
+
         $myList = [];
         array_walk($categoryList, function($category, $key) use (&$myList) {
             $myList[$category['id']] = $category['category_name'];
         });
         return array_flip($myList);
+    }
+
+    public function getCategoryWitoutParents()
+    {
+        return $this->createQueryBuilder('c')
+        ->andWhere('c.parent is NOT NULL')
+        ->getQuery()
+        ->getResult();
     }
 
     // /**
