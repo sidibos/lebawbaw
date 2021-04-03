@@ -69,6 +69,11 @@ class Category
      */
     private $postAlerts;
 
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $categorySlug;
+
     public function __construct()
     {
         $this->parent_category = new ArrayCollection();
@@ -304,6 +309,18 @@ class Category
                 $postAlert->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategorySlug(): ?string
+    {
+        return $this->categorySlug;
+    }
+
+    public function setCategorySlug(string $categorySlug): self
+    {
+        $this->categorySlug = $categorySlug;
 
         return $this;
     }

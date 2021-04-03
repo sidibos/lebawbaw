@@ -81,4 +81,12 @@ class PostController extends AbstractController
     {
         return $this->render('post/success.html.twig');
     }
+
+    /**
+     * @Route("/post/{slug}", name="post_show")
+     */
+    public function show(string $slug)
+    {
+
+    }
 }

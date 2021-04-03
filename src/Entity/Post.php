@@ -101,6 +101,11 @@ class Post
      */
     private $address;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $postSlug;
+
     public function __construct()
     {
         $this->postImages = new ArrayCollection();
@@ -336,6 +341,18 @@ class Post
     public function setAddress(?string $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getPostSlug(): ?string
+    {
+        return $this->postSlug;
+    }
+
+    public function setPostSlug(string $postSlug): self
+    {
+        $this->postSlug = $postSlug;
 
         return $this;
     }
