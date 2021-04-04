@@ -87,6 +87,12 @@ class PostController extends AbstractController
      */
     public function show(string $slug)
     {
-
+        $post       = $this->getDoctrine()->getRepository(Post::class)->findOneBy(['postSlug' => $slug]);
+        $postImages = $post->getPostImages();
+        return $this->render('post/show.html.twig', [
+            'post'          => $post,
+            'postImages'    => $postImages,
+            'imageCount'    => count($postImages)
+        ]);
     }
 }
